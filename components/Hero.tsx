@@ -41,6 +41,21 @@ const FacebookIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+const AurevaLogoIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={props.className}
+    style={props.style}
+    {...props}
+  >
+    {/* Symmetrical curved geometric star emblem (astroid/four-pointed star) */}
+    <path d="M12 2C12 7.5 7.5 12 2 12C7.5 12 12 16.5 12 22C12 16.5 16.5 12 22 12C16.5 12 12 7.5 12 2Z" />
+    {/* Small circular cutout in the center for a luxury brand aesthetic */}
+    <circle cx="12" cy="12" r="2" className="fill-stone-950 dark:fill-stone-900" />
+  </svg>
+);
+
 export default function Hero() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const shouldReduceMotion = useReducedMotion();
@@ -147,13 +162,20 @@ export default function Hero() {
       </motion.div>
 
       {/* Header */}
-      <header className="relative z-20 flex justify-between items-center px-6 md:px-12 lg:px-24 py-8 md:py-10 text-white">
+      <header className="relative z-20 w-full max-w-[90rem] mx-auto flex justify-between items-center px-6 md:px-12 lg:px-20 py-10 md:py-12 text-white">
         <Link 
           href="/" 
           aria-label="Aureva Home" 
-          className="outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-transparent rounded-sm transition-opacity hover:opacity-90"
+          className="group flex items-center gap-3.5 outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-transparent rounded-sm transition-opacity hover:opacity-90"
         >
-          <span className="text-xl md:text-2xl lg:text-3xl font-serif tracking-[0.25em] uppercase leading-none font-light">
+          <Image
+            src="/images/aureva-logo-mark.webp"
+            alt="Aureva Logo Mark"
+            width={28}
+            height={28}
+            className="w-7 h-7 md:w-8 md:h-8 object-contain transition-transform duration-300 group-hover:scale-105"
+          />
+          <span className="text-xl md:text-2xl font-serif tracking-[0.25em] uppercase leading-none font-light">
             Aureva
           </span>
         </Link>
@@ -177,12 +199,12 @@ export default function Hero() {
       </header>
 
       {/* Main Content Area */}
-      <main className="relative z-10 flex flex-col justify-end px-6 md:px-12 lg:px-24 pb-16 md:pb-24 lg:pb-28 w-full max-w-5xl flex-grow">
+      <main className="relative z-10 w-full max-w-[90rem] mx-auto flex flex-col justify-end px-6 md:px-12 lg:px-20 pb-20 md:pb-28 lg:pb-32 flex-grow">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="max-w-2xl"
+          className="max-w-3xl"
         >
           {/* Tagline / Subtitle */}
           <motion.div variants={itemVariants} className="mb-4">
@@ -194,7 +216,7 @@ export default function Hero() {
           {/* Heading */}
           <motion.h1 
             variants={itemVariants} 
-            className="text-5xl md:text-7xl lg:text-8xl font-serif font-light text-white leading-[1.08] tracking-tight mb-8"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5rem] font-serif font-light text-white leading-[1.12] tracking-tight mb-8"
           >
             A Sanctuary <br />
             <span className="italic font-light text-white/95">of the</span> Senses.
@@ -203,7 +225,7 @@ export default function Hero() {
           {/* Paragraph */}
           <motion.p 
             variants={itemVariants} 
-            className="text-stone-300 text-base md:text-lg lg:text-xl font-sans font-light max-w-lg mb-10 md:mb-12 leading-relaxed tracking-wide"
+            className="text-stone-300/85 text-sm md:text-base font-sans font-light max-w-xl mb-10 md:mb-12 leading-relaxed tracking-wide"
           >
             Discover your private haven where untouched natural beauty meets unparalleled, mindful luxury. Designed for those who seek the extraordinary.
           </motion.p>
@@ -212,7 +234,7 @@ export default function Hero() {
           <motion.div variants={itemVariants} className="flex flex-wrap gap-4 items-center">
             <a 
               href="#discover" 
-              className="group inline-flex items-center justify-center min-h-[48px] px-8 bg-white/10 backdrop-blur-md border border-white/20 text-white font-sans text-xs font-medium tracking-[0.25em] uppercase transition-all duration-300 hover:bg-white hover:text-stone-950 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950 rounded-sm"
+              className="group inline-flex items-center justify-center min-h-[48px] px-8 bg-white text-stone-950 font-sans text-xs font-semibold tracking-[0.2em] uppercase rounded-full transition-all duration-300 hover:bg-stone-200 hover:scale-[1.02] active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950"
             >
               <span className="mr-3">Discover Aureva</span>
               <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
@@ -220,7 +242,7 @@ export default function Hero() {
             
             <a 
               href="#residences" 
-              className="group inline-flex items-center justify-center min-h-[48px] px-8 border border-white/10 text-stone-300 font-sans text-xs font-medium tracking-[0.25em] uppercase transition-all duration-300 hover:border-white hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950 rounded-sm"
+              className="group inline-flex items-center justify-center min-h-[48px] px-8 border border-white/20 text-stone-300 font-sans text-xs font-semibold tracking-[0.2em] uppercase rounded-full transition-all duration-300 hover:border-white hover:text-white hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950"
             >
               Explore Residences
             </a>
@@ -229,7 +251,7 @@ export default function Hero() {
       </main>
 
       {/* Footer / Scroll Indicator */}
-      <footer className="relative z-10 px-6 md:px-12 lg:px-24 py-8 flex justify-between items-center text-[10px] md:text-xs tracking-[0.15em] uppercase text-stone-400 font-light border-t border-white/5 bg-stone-950/20 backdrop-blur-sm">
+      <footer className="relative z-10 w-full max-w-[90rem] mx-auto flex justify-between items-center px-6 md:px-12 lg:px-20 py-8 text-[10px] md:text-xs tracking-[0.15em] uppercase text-stone-400 font-light border-t border-white/5 bg-stone-950/20 backdrop-blur-sm">
         <div className="hidden sm:block">
           <span>Maldives Archipelago</span>
         </div>
