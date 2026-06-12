@@ -97,26 +97,39 @@ export default function ImmersiveGallery() {
     restDelta: 0.001
   });
 
-  // Map vertical scroll progress (0 to 1) to horizontal track translation (0 to -scrollRange)
-  const xTranslation = useTransform(smoothProgress, [0, 1], [0, -scrollRange]);
+  // Map vertical scroll progress (0.22 to 0.88) to horizontal track translation (0 to -scrollRange)
+  const xTranslation = useTransform(smoothProgress, [0.22, 0.88], [0, -scrollRange], { clamp: true });
   
   // Micro-parallax: background ambient glows translate 25% of the speed of cards
-  const bgXTranslation = useTransform(smoothProgress, [0, 1], [0, -scrollRange * 0.25]);
+  const bgXTranslation = useTransform(smoothProgress, [0.22, 0.88], [0, -scrollRange * 0.25], { clamp: true });
 
   // Micro-parallax: lookbook background numerals shift slightly opposite to scrolling direction
-  const numeralTranslation = useTransform(smoothProgress, [0, 1], [60, -60]);
-
-  // Spine timeline vertical progress line height (0% to 100%)
-  const spineHeight = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
+  const numeralTranslation = useTransform(smoothProgress, [0.22, 0.88], [60, -60], { clamp: true });
 
   return (
     <section
       ref={containerRef}
       id="gallery"
-      className="relative min-h-[300vh] bg-[#080706] border-t border-stone-900/30"
+      className="relative min-h-[350vh] bg-[#080706] border-t border-stone-900/30"
     >
-      {/* Sticky Viewport Container */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center">
+      {/* Static Header: scrolls out of view before cards pin */}
+      <div className="w-full max-w-[90rem] mx-auto px-6 md:px-12 lg:px-20 pt-20 pb-8 relative z-20">
+        <header className="max-w-4xl border-l border-stone-800/60 pl-6 md:pl-10">
+          {/* Category / Lookbook Header */}
+          <span className="font-sans text-xs md:text-sm tracking-[0.3em] uppercase text-stone-400 mb-4 block">
+            Atmosphere &amp; Lifestyle
+          </span>
+          
+          {/* H2 Title */}
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-serif font-light text-stone-100 tracking-wide leading-tight">
+            Moments Worth <br className="hidden md:block" />
+            <span className="italic font-light text-stone-300">Remembering</span>.
+          </h2>
+        </header>
+      </div>
+
+      {/* Sticky Viewport Container: only pins the horizontal lookbook track */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center py-4 md:py-6 lg:py-8 z-10">
         
         {/* Luxury Texture Canvas: 12-Column Blueprint Guidelines */}
         <div className="absolute inset-0 z-0 pointer-events-none">
@@ -142,7 +155,7 @@ export default function ImmersiveGallery() {
             }}
           />
           <motion.div
-            style={{ x: shouldReduceMotion ? 0 : useTransform(smoothProgress, [0, 1], [0, scrollRange * 0.15]) }}
+            style={{ x: shouldReduceMotion ? 0 : useTransform(smoothProgress, [0.22, 0.88], [0, scrollRange * 0.15], { clamp: true }) }}
             className="absolute bottom-[10%] right-[-10%] w-[800px] h-[800px] bg-[#221c14]/25 rounded-full blur-[140px] mix-blend-screen pointer-events-none"
             animate={{
               scale: [1.06, 1, 1.06],
@@ -156,43 +169,21 @@ export default function ImmersiveGallery() {
           />
         </div>
 
-        {/* Core Layout Grid */}
-        <div className="relative z-10 w-full max-w-[90rem] mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-1 lg:grid-cols-12 items-center gap-8 lg:gap-0 h-full">
-          
-          {/* Static Left Spine Typography Column */}
-          <div className="col-span-1 lg:col-span-4 flex flex-col justify-center border-l border-stone-800/60 pl-8 md:pl-12 h-fit relative z-20 py-8 lg:py-16">
-            
-            {/* Spine Vertical Timeline Progress Indicator */}
-            <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-stone-850/40 pointer-events-none" />
-            <motion.div
-              style={{ height: shouldReduceMotion ? "100%" : spineHeight }}
-              className="absolute left-0 top-0 w-[1px] bg-stone-500/80 pointer-events-none"
-            />
-            
-            {/* Category / Lookbook Header */}
-            <span className="font-sans text-[10px] md:text-xs tracking-[0.3em] uppercase text-stone-400 mb-4 block">
-              Aisling Lookbook
-            </span>
-            
-            {/* H2 Title */}
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif font-light text-stone-100 tracking-wide leading-[1.15] mb-2">
-              Moments Worth <br className="hidden lg:block" />
-              <span className="italic font-light text-stone-300">Remembering</span>.
-            </h2>
-          </div>
+        {/* Core Inner Container */}
+        <div className="relative z-10 w-full max-w-[90rem] mx-auto px-6 md:px-12 lg:px-20 flex flex-col justify-center">
 
-          {/* Right Side Sliding Lookbook Row */}
+          {/* Sliding Lookbook Row */}
           <div 
             ref={viewportRef}
-            className="col-span-1 lg:col-span-8 overflow-hidden h-full flex items-center relative py-6 lg:py-0"
+            className="w-full overflow-hidden relative z-10 py-4"
           >
             {shouldReduceMotion ? (
               // Reduced Motion Fallback: normal responsive horizontal touch swipe row
-              <div className="flex gap-8 overflow-x-auto w-full pb-6 scrollbar-thin scrollbar-thumb-stone-800 scrollbar-track-transparent">
+              <div className="flex gap-6 overflow-x-auto w-full pb-6 pl-6 md:pl-10 scrollbar-thin scrollbar-thumb-stone-800 scrollbar-track-transparent">
                 {PORTFOLIO_ITEMS.map((item) => (
                   <article 
                     key={item.id}
-                    className="w-[260px] sm:w-[320px] md:w-[380px] flex-shrink-0 flex flex-col items-start group"
+                    className="w-[210px] sm:w-[240px] md:w-[270px] lg:w-[290px] xl:w-[300px] flex-shrink-0 flex flex-col items-start group"
                   >
                     <div className="relative w-full aspect-[3/4] overflow-hidden border border-white/5 bg-stone-950 shadow-2xl mb-6 rounded-sm">
                       <Image
@@ -206,9 +197,9 @@ export default function ImmersiveGallery() {
                       <div className="absolute inset-0 bg-gradient-to-t from-[#080706]/50 via-transparent to-transparent pointer-events-none" />
                     </div>
                     <div className="w-full pl-2">
-                      <p className="font-sans text-[9px] tracking-[0.2em] uppercase text-stone-400 mb-2">{item.portfolio}</p>
-                      <h3 className="text-xl font-serif font-light text-stone-100 tracking-wide mb-2">{item.title}</h3>
-                      <p className="text-stone-300 text-xs md:text-sm font-sans font-light leading-relaxed">{item.caption}</p>
+                      <p className="font-sans text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-stone-400 mb-2">{item.portfolio}</p>
+                      <h3 className="text-lg md:text-xl lg:text-2xl font-serif font-light text-stone-100 tracking-wide mb-3">{item.title}</h3>
+                      <p className="text-stone-300 text-[11px] md:text-xs font-sans font-light leading-relaxed max-w-[95%]">{item.caption}</p>
                     </div>
                   </article>
                 ))}
@@ -222,12 +213,12 @@ export default function ImmersiveGallery() {
                   willChange: "transform",
                   transformStyle: "preserve-3d"
                 }}
-                className="flex gap-8 md:gap-12 lg:gap-16 pr-[20vw] md:pr-[40vw] select-none"
+                className="flex gap-6 md:gap-10 lg:gap-12 pl-6 md:pl-10 pr-6 md:pr-10 select-none"
               >
                 {PORTFOLIO_ITEMS.map((item) => (
                   <article
                     key={item.id}
-                    className="w-[260px] sm:w-[320px] md:w-[380px] lg:w-[420px] flex-shrink-0 flex flex-col items-start group relative"
+                    className="w-[210px] sm:w-[240px] md:w-[270px] lg:w-[290px] xl:w-[300px] flex-shrink-0 flex flex-col items-start group relative"
                   >
                     
                     {/* Widescreen lookbook background numeral with micro-parallax offset translation */}
@@ -237,7 +228,7 @@ export default function ImmersiveGallery() {
                           x: numeralTranslation,
                           willChange: "transform"
                         }}
-                        className="inline-block font-serif text-[10rem] md:text-[14rem] lg:text-[18rem] font-light text-stone-800/10 leading-none"
+                        className="inline-block font-serif text-[8rem] md:text-[11rem] lg:text-[14rem] font-light text-stone-800/10 leading-none"
                       >
                         {item.number}
                       </motion.span>
@@ -262,10 +253,10 @@ export default function ImmersiveGallery() {
                       <p className="font-sans text-[9px] md:text-[10px] tracking-[0.2em] uppercase text-stone-400 mb-2">
                         {item.portfolio}
                       </p>
-                      <h3 className="text-xl md:text-2xl lg:text-3xl font-serif font-light text-stone-100 tracking-wide mb-3">
+                      <h3 className="text-lg md:text-xl lg:text-2xl font-serif font-light text-stone-100 tracking-wide mb-3">
                         {item.title}
                       </h3>
-                      <p className="text-stone-300 text-xs md:text-sm font-sans font-light leading-relaxed max-w-[90%]">
+                      <p className="text-stone-300 text-[11px] md:text-xs font-sans font-light leading-relaxed max-w-[95%]">
                         {item.caption}
                       </p>
                     </div>
