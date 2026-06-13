@@ -4,6 +4,7 @@ import CuratedExperiences from "../components/CuratedExperiences";
 import WhyAureva from "../components/WhyAureva";
 import ImmersiveGallery from "../components/ImmersiveGallery";
 import GuestChronicles from "../components/GuestChronicles";
+import DestinationDiscovery from "../components/DestinationDiscovery";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <ImmersiveGallery />
       <WhyAureva />
       <GuestChronicles />
+      <DestinationDiscovery />
     </>
   );
 }
