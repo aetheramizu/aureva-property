@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, useMotionValue, useSpring, useReducedMotion, AnimatePresence } from "framer-motion";
+import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 
 interface TestimonialItem {
   id: string;
@@ -44,7 +44,7 @@ const TESTIMONIALS: TestimonialItem[] = [
   }
 ];
 
-// Magnetic spring avatar wrapper
+// Magnetic spring avatar wrapper with stiffness: 70, damping: 25
 function MagneticAvatar({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
@@ -148,6 +148,13 @@ export default function GuestChronicles() {
     }
   };
 
+  // Asymmetrical desktop vertical positioning classes
+  const getAsymmetricClass = (index: number) => {
+    if (index === 0) return "translate-y-0";
+    if (index === 1) return "translate-y-0 lg:translate-y-12";
+    return "translate-y-0 lg:translate-y-6";
+  };
+
   return (
     <section
       ref={containerRef}
@@ -158,7 +165,7 @@ export default function GuestChronicles() {
         setIsSectionHovered(false);
         setHoveredIndex(null);
       }}
-      className="relative w-full bg-[#080706] border-t border-stone-900/40 py-24 md:py-32 lg:py-44 overflow-hidden"
+      className="relative w-full bg-[#080706] border-t border-stone-900/40 pt-24 pb-32 md:pt-32 md:pb-44 lg:pt-44 lg:pb-56 overflow-hidden"
     >
       {/* 1. Luxury Texture Backplane: 12-Column Blueprint Guidelines */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -187,34 +194,36 @@ export default function GuestChronicles() {
         />
       )}
 
-      {/* 3. Core Symmetrical 12-Column Grid Wrapper */}
-      <motion.div
-        variants={listVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-10% 0px -15% 0px" }}
-        className="relative z-10 w-full max-w-[90rem] mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-12 gap-y-16 lg:gap-y-0"
-      >
+      {/* 3. Core Inner Wrapper */}
+      <div className="relative z-10 w-full max-w-[90rem] mx-auto px-6 md:px-12 lg:px-20 flex flex-col">
         
-        {/* Left Column (Columns 1 to 4): Sticky Left-Aligned Section Header */}
+        {/* Top-Centered Editorial Header */}
         <motion.div 
-          variants={itemVariants}
-          className="col-span-12 lg:col-span-4 flex flex-col items-start justify-start lg:sticky lg:top-24 h-fit"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="max-w-3xl mx-auto text-center mb-20 lg:mb-24 flex flex-col items-center z-10"
         >
           <span className="font-sans text-xs md:text-sm tracking-[0.3em] uppercase text-stone-400 mb-4 block">
             Guest Chronicles
           </span>
           <h2 className="text-4xl md:text-5xl lg:text-[2.75rem] font-serif font-light text-stone-100 tracking-wide mb-6 leading-[1.25]">
-            Loved By Travelers <br />
-            Worldwide.
+            Loved By Travelers Worldwide.
           </h2>
-          <p className="text-stone-400 text-sm md:text-base font-sans font-light leading-relaxed max-w-sm">
+          <p className="text-stone-400 text-sm md:text-base font-sans font-light leading-relaxed max-w-lg">
             The true measure of luxury is not what we build, but the emotional memories our guests take home.
           </p>
         </motion.div>
 
-        {/* Right Column (Columns 6 to 12): Vertical Chronicles Stacking */}
-        <div className="col-span-12 lg:col-start-6 lg:col-span-7 flex flex-col justify-start relative">
+        {/* 3-Column Asymmetrical Grid */}
+        <motion.div
+          variants={listVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-10% 0px -15% 0px" }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 pb-10"
+        >
           {TESTIMONIALS.map((item, index) => {
             const isItemHovered = hoveredIndex === index;
             const isMuted = hoveredIndex !== null && hoveredIndex !== index;
@@ -223,22 +232,48 @@ export default function GuestChronicles() {
               <motion.article
                 key={item.id}
                 variants={itemVariants}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                tabIndex={0}
-                className="relative w-full py-16 md:py-20 border-t border-white/[0.04] first:border-t flex flex-col gap-6 cursor-pointer select-none outline-none focus-visible:ring-2 focus-visible:ring-stone-300 focus-visible:ring-offset-8 focus-visible:ring-offset-[#080706] rounded-sm group transition-all duration-500"
+                className={`relative w-full ${getAsymmetricClass(index)}`}
               >
-                {/* Symmetrical Active Line Expansion */}
-                <motion.div
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: isItemHovered ? 1 : 0 }}
-                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
-                  className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-amber-500/50 to-transparent origin-center z-20"
-                />
+                <div
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  tabIndex={0}
+                  className="relative w-full h-full min-h-[380px] bg-[#0c0b0a]/30 backdrop-blur-md border border-white/[0.03] hover:border-white/[0.08] hover:bg-[#11100f]/40 p-8 md:p-10 rounded-sm flex flex-col justify-between cursor-pointer select-none outline-none focus-visible:ring-2 focus-visible:ring-stone-300 focus-visible:ring-offset-8 focus-visible:ring-offset-[#080706] transition-all duration-700 z-10"
+                >
+                  {/* Symmetrical Active Top Line Expansion */}
+                  <motion.div
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: isItemHovered ? 1 : 0 }}
+                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
+                    className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-amber-500/50 to-transparent origin-center z-20"
+                  />
 
-                {/* Testimonial Header Info */}
-                <div className="w-full flex items-center justify-between">
-                  <div className="flex items-center gap-3">
+                  {/* Card Header: Chronicle Metadata */}
+                  <div className="w-full flex items-center justify-between mb-6">
+                    <span className="font-sans text-[10px] tracking-[0.2em] uppercase text-stone-500 font-medium">
+                      Chronicle {item.number}
+                    </span>
+                    <span className="font-sans text-[9px] tracking-[0.2em] uppercase text-stone-600 font-semibold">
+                      {item.category}
+                    </span>
+                  </div>
+
+                  {/* Card Body: Quote text */}
+                  <div className="grow flex flex-col justify-start mb-8">
+                    <span className="font-serif text-5xl leading-none text-amber-500/20 block select-none mb-1">“</span>
+                    <motion.p
+                      animate={{
+                        color: isItemHovered ? "#f5f5f4" : isMuted ? "#57534e" : "#a8a29e"
+                      }}
+                      transition={{ duration: 0.35, ease: "easeOut" }}
+                      className="font-serif text-base md:text-lg italic font-light leading-relaxed tracking-wide text-stone-400"
+                    >
+                      {item.quote.slice(1, -1)} {/* slice to trim double curly quotes since we render visual ones */}
+                    </motion.p>
+                  </div>
+
+                  {/* Card Footer: Magnetic Profile */}
+                  <div className="w-full flex items-center gap-3 pt-6 border-t border-white/[0.02]">
                     {/* Magnetic Avatar Frame */}
                     <MagneticAvatar>
                       <motion.div
@@ -264,49 +299,23 @@ export default function GuestChronicles() {
                       <motion.span
                         animate={{ color: isItemHovered ? "#f5f5f4" : "#a8a29e" }}
                         transition={{ duration: 0.3 }}
-                        className="font-sans text-xs md:text-sm font-medium tracking-wide"
+                        className="font-sans text-xs md:text-sm font-medium tracking-wide text-stone-300"
                       >
                         {item.author}
                       </motion.span>
-                      <span className="font-sans text-[10px] tracking-wider text-stone-500 uppercase">
+                      <span className="font-sans text-[9px] tracking-wider text-stone-500 uppercase">
                         {item.location}
                       </span>
                     </div>
                   </div>
 
-                  <motion.span
-                    animate={{
-                      x: isItemHovered ? 6 : 0,
-                      color: isItemHovered ? "#f5f5f4" : "#78716c"
-                    }}
-                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as const }}
-                    className="font-sans text-[11px] tracking-[0.25em] uppercase font-medium text-stone-500 hidden sm:inline"
-                  >
-                    {item.number} / {item.category}
-                  </motion.span>
                 </div>
-
-                {/* Testimonial Quote */}
-                <div className="w-full">
-                  <motion.p
-                    animate={{
-                      color: isItemHovered ? "#f5f5f4" : isMuted ? "#57534e" : "#a8a29e"
-                    }}
-                    transition={{ duration: 0.35, ease: "easeOut" }}
-                    className="font-serif text-lg md:text-xl lg:text-[1.65rem] font-light italic leading-relaxed tracking-wide text-stone-400"
-                  >
-                    {item.quote}
-                  </motion.p>
-                </div>
-
               </motion.article>
             );
           })}
-          {/* Bottom border closing divider */}
-          <div className="w-full border-b border-white/[0.04]" />
-        </div>
+        </motion.div>
+      </div>
 
-      </motion.div>
     </section>
   );
 }
