@@ -5,6 +5,7 @@ import WhyAureva from "../components/WhyAureva";
 import ImmersiveGallery from "../components/ImmersiveGallery";
 import GuestChronicles from "../components/GuestChronicles";
 import DestinationDiscovery from "../components/DestinationDiscovery";
+import BookingCTA from "../components/BookingCTA";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <WhyAureva />
       <GuestChronicles />
       <DestinationDiscovery />
+      <BookingCTA />
     </>
   );
 }
