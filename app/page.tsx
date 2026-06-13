@@ -6,6 +6,7 @@ import ImmersiveGallery from "../components/ImmersiveGallery";
 import GuestChronicles from "../components/GuestChronicles";
 import DestinationDiscovery from "../components/DestinationDiscovery";
 import BookingCTA from "../components/BookingCTA";
+import LuxuryFooter from "../components/LuxuryFooter";
 
 export default function Home() {
   return (
@@ -18,6 +19,8 @@ export default function Home() {
       <GuestChronicles />
       <DestinationDiscovery />
       <BookingCTA />
+      <LuxuryFooter />
     </>
   );
 }
+
