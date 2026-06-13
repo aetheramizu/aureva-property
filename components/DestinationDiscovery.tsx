@@ -229,10 +229,10 @@ export default function DestinationDiscovery() {
               >
                 {/* Technical latitude/longitude markers */}
                 <text x="35" y="45" className="font-sans text-[8px] tracking-[0.3em] fill-[#c5a880]/40 uppercase select-none">
-                  N 3° 12' 24"
+                  N 3° 12&apos; 24&quot;
                 </text>
                 <text x="690" y="45" className="font-sans text-[8px] tracking-[0.3em] fill-[#c5a880]/40 uppercase select-none">
-                  E 73° 08' 12"
+                  E 73° 08&apos; 12&quot;
                 </text>
 
                 {/* Compass coordinate lines */}

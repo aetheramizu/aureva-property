@@ -41,20 +41,7 @@ const FacebookIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-const AurevaLogoIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    className={props.className}
-    style={props.style}
-    {...props}
-  >
-    {/* Symmetrical curved geometric star emblem (astroid/four-pointed star) */}
-    <path d="M12 2C12 7.5 7.5 12 2 12C7.5 12 12 16.5 12 22C12 16.5 16.5 12 22 12C16.5 12 12 7.5 12 2Z" />
-    {/* Small circular cutout in the center for a luxury brand aesthetic */}
-    <circle cx="12" cy="12" r="2" className="fill-stone-950 dark:fill-stone-900" />
-  </svg>
-);
+
 
 export default function Hero() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

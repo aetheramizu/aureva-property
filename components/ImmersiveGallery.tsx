@@ -102,6 +102,7 @@ export default function ImmersiveGallery() {
   
   // Micro-parallax: background ambient glows translate 25% of the speed of cards
   const bgXTranslation = useTransform(smoothProgress, [0.22, 0.88], [0, -scrollRange * 0.25], { clamp: true });
+  const bgXTranslation2 = useTransform(smoothProgress, [0.22, 0.88], [0, scrollRange * 0.15], { clamp: true });
 
   // Micro-parallax: lookbook background numerals shift slightly opposite to scrolling direction
   const numeralTranslation = useTransform(smoothProgress, [0.22, 0.88], [60, -60], { clamp: true });
@@ -154,8 +155,8 @@ export default function ImmersiveGallery() {
               ease: "easeInOut",
             }}
           />
-          <motion.div
-            style={{ x: shouldReduceMotion ? 0 : useTransform(smoothProgress, [0.22, 0.88], [0, scrollRange * 0.15], { clamp: true }) }}
+        <motion.div
+            style={{ x: shouldReduceMotion ? 0 : bgXTranslation2 }}
             className="absolute bottom-[10%] right-[-10%] w-[800px] h-[800px] bg-[#221c14]/25 rounded-full blur-[140px] mix-blend-screen pointer-events-none"
             animate={{
               scale: [1.06, 1, 1.06],

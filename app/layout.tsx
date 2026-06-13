@@ -56,10 +56,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorantGaramond.variable} ${inter.variable} h-full antialiased`}
+      className={`${cormorantGaramond.variable} ${inter.variable} h-full antialiased overflow-x-clip max-w-full`}
     >
-      <body className="min-h-full flex flex-col bg-stone-950 text-stone-100">{children}</body>
+      <body className="min-h-full flex flex-col bg-stone-950 text-stone-100 overflow-x-clip max-w-full">{children}</body>
     </html>
   );
 }
-

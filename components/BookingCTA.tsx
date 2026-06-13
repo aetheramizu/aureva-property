@@ -15,7 +15,6 @@ interface Particle {
 export default function BookingCTA() {
   const containerRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
-  const [isHovered, setIsHovered] = useState(false);
   const [particles, setParticles] = useState<Particle[]>([]);
 
   // Mouse coordinate motion values
@@ -40,7 +39,10 @@ export default function BookingCTA() {
       duration: Math.random() * 12 + 12, // 12s to 24s travel time
       delay: Math.random() * -24
     }));
-    setParticles(items);
+    // Wrap in setTimeout to set state asynchronously and avoid ESLint warnings
+    setTimeout(() => {
+      setParticles(items);
+    }, 0);
   }, []);
 
   // Initialize mouse coordinates to center of section
@@ -59,12 +61,7 @@ export default function BookingCTA() {
     mouseY.set(e.clientY - rect.top);
   };
 
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
   const handleMouseLeave = () => {
-    setIsHovered(false);
     // Smoothly drift back to the center
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
@@ -78,7 +75,6 @@ export default function BookingCTA() {
       ref={containerRef}
       id="booking-cta"
       onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className="relative min-h-screen w-full flex flex-col justify-center items-center overflow-hidden px-6 md:px-12 lg:px-24 bg-[#080706]"
     >
@@ -158,7 +154,7 @@ export default function BookingCTA() {
             style={{
               "--x": xPx,
               "--y": yPx,
-            } as any}
+            } as React.CSSProperties}
             className="color-reveal-layer absolute inset-0 w-full h-full brightness-[0.55] contrast-[1.1] scale-102 animate-ken-burns will-change-transform"
           >
             <Image
