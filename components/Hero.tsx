@@ -60,13 +60,15 @@ export default function Hero() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
-  // Navigation links
+  // Navigation links referencing exact built sections
   const menuLinks = [
-    { label: "The Sanctuary", href: "#sanctuary" },
-    { label: "Villas & Residences", href: "#villas" },
-    { label: "Bespoke Experiences", href: "#experiences" },
-    { label: "Wellness & Spa", href: "#wellness" },
-    { label: "Heritage & Location", href: "#heritage" },
+    { label: "Featured Villas", href: "#featured-villas" },
+    { label: "Curated Experiences", href: "#experiences" },
+    { label: "Immersive Gallery", href: "#gallery" },
+    { label: "Why Aureva", href: "#philosophy" },
+    { label: "Guest Chronicles", href: "#testimonials" },
+    { label: "Destination Discovery", href: "#destination-discovery" },
+    { label: "Reservations", href: "#booking-cta" },
   ];
 
   // Framer Motion variants
@@ -233,7 +235,7 @@ export default function Hero() {
           {/* CTA Button Container */}
           <motion.div variants={itemVariants} className="flex flex-wrap gap-4 items-center">
             <a 
-              href="#discover" 
+              href="#philosophy" 
               className="group inline-flex items-center justify-center min-h-[48px] px-8 bg-white text-stone-950 font-sans text-xs font-semibold tracking-[0.2em] uppercase rounded-full transition-all duration-300 hover:bg-stone-200 hover:scale-[1.02] active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950"
             >
               <span className="mr-3">Discover Aureva</span>
@@ -241,7 +243,7 @@ export default function Hero() {
             </a>
             
             <a 
-              href="#residences" 
+              href="#featured-villas" 
               className="group inline-flex items-center justify-center min-h-[48px] px-8 border border-white/20 text-stone-300 font-sans text-xs font-semibold tracking-[0.2em] uppercase rounded-full transition-all duration-300 hover:border-white hover:text-white hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950"
             >
               Explore Residences
@@ -312,14 +314,40 @@ export default function Hero() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="relative w-full max-w-lg md:max-w-xl h-full bg-stone-900/95 backdrop-blur-xl border-l border-white/10 px-8 md:px-16 py-12 flex flex-col justify-between overflow-y-auto text-white"
+              className="relative w-full max-w-lg md:max-w-xl h-full bg-stone-950/95 backdrop-blur-xl border-l border-white/10 px-8 md:px-16 py-12 flex flex-col justify-between overflow-y-auto text-white"
             >
-              {/* Close Button Header */}
-              <div className="flex justify-end items-center mb-12">
+              {/* Ambient twilight copper backdrop spotlight blur inside the panel */}
+              <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-[#2d1f14]/30 rounded-full blur-[100px] pointer-events-none mix-blend-screen z-0" />
+
+              {/* Faint vertical gridline overlay inside drawer */}
+              <div className="absolute top-0 bottom-0 left-24 border-l border-white/[0.03] pointer-events-none z-0" />
+
+              {/* Drawer Header Brand & Close Button */}
+              <div className="relative z-10 flex justify-between items-center mb-10 md:mb-14">
+                <div className="flex items-center gap-3">
+                  <div className="relative w-8 h-8 flex items-center justify-center">
+                    <motion.div
+                      className="absolute inset-0 border border-[#c5a880]/30 rounded-full border-dashed"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
+                    />
+                    <Image
+                      src="/images/aureva-logo-mark.webp"
+                      alt="Aureva Logo"
+                      width={18}
+                      height={18}
+                      className="object-contain"
+                    />
+                  </div>
+                  <span className="font-serif text-sm tracking-[0.25em] uppercase font-light text-stone-200">
+                    Aureva
+                  </span>
+                </div>
+
                 <button
                   onClick={() => setIsMenuOpen(false)}
                   aria-label="Close menu"
-                  className="group flex items-center justify-center w-11 h-11 hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-stone-900 rounded"
+                  className="group flex items-center justify-center w-11 h-11 hover:opacity-85 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-stone-900 rounded"
                 >
                   <span className="hidden md:block font-sans text-[10px] tracking-[0.2em] uppercase mr-3 opacity-80 group-hover:opacity-100 transition-opacity">
                     Close
@@ -329,46 +357,49 @@ export default function Hero() {
               </div>
 
               {/* Navigation Links */}
-              <nav className="flex flex-col gap-6 md:gap-8 my-auto">
+              <nav className="relative z-10 flex flex-col gap-4 md:gap-5 my-auto pl-4">
                 {menuLinks.map((link, idx) => (
                   <motion.div key={idx} variants={menuLinkVariants}>
-                    <a
+                    <motion.a
                       href={link.href}
                       onClick={() => setIsMenuOpen(false)}
-                      className="group inline-flex items-baseline font-serif text-3xl md:text-5xl font-light tracking-wide text-stone-300 hover:text-white transition-colors duration-300"
+                      className="group inline-flex items-center font-serif text-lg sm:text-xl md:text-2xl lg:text-[1.65rem] font-light tracking-wide text-stone-350 hover:text-white transition-colors duration-500 outline-none focus-visible:text-white"
+                      whileHover={{ x: 6 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 22 }}
                     >
-                      <span className="font-sans text-xs tracking-widest text-stone-500 mr-4 md:mr-6 group-hover:text-white transition-colors duration-300">
+                      <span className="font-sans text-[9px] sm:text-[10px] tracking-[0.25em] text-stone-600 mr-3 md:mr-4 group-hover:text-[#c5a880] transition-colors duration-500">
                         0{idx + 1}
                       </span>
                       <span>{link.label}</span>
-                      <ArrowRight className="w-5 h-5 ml-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                    </a>
+                      <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 text-[#c5a880]" />
+                    </motion.a>
                   </motion.div>
                 ))}
               </nav>
 
               {/* Drawer Footer / Contacts */}
-              <div className="mt-16 border-t border-white/10 pt-8 flex flex-col gap-6">
+              <div className="relative z-10 mt-12 md:mt-16 border-t border-white/10 pt-8 flex flex-col gap-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-stone-400 font-sans tracking-wide">
                   <div className="flex flex-col gap-2">
-                    <span className="uppercase text-[9px] tracking-[0.2em] text-white/50">Location</span>
+                    <span className="uppercase text-[9px] tracking-[0.2em] text-[#c5a880]/70">Location</span>
                     <a 
-                      href="#location" 
-                      className="flex items-center gap-2 hover:text-white transition-colors"
+                      href="#destination-discovery" 
+                      onClick={() => setIsMenuOpen(false)}
+                      className="flex items-center gap-2 hover:text-white transition-colors outline-none focus-visible:text-white"
                     >
-                      <MapPin className="w-3.5 h-3.5" />
-                      <span>Fari Islands, North Malé Atoll</span>
+                      <MapPin className="w-3.5 h-3.5 text-[#c5a880]" />
+                      <span>North Malé Archipelago, Maldives</span>
                     </a>
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <span className="uppercase text-[9px] tracking-[0.2em] text-white/50">Inquiries</span>
+                    <span className="uppercase text-[9px] tracking-[0.2em] text-[#c5a880]/70">Inquiries</span>
                     <a 
-                      href="mailto:reservations@aureva.com" 
-                      className="flex items-center gap-2 hover:text-white transition-colors"
+                      href="mailto:hello@aureva.com" 
+                      className="flex items-center gap-2 hover:text-white transition-colors outline-none focus-visible:text-white"
                     >
-                      <Mail className="w-3.5 h-3.5" />
-                      <span>reservations@aureva.com</span>
+                      <Mail className="w-3.5 h-3.5 text-[#c5a880]" />
+                      <span>hello@aureva.com</span>
                     </a>
                   </div>
                 </div>
@@ -376,10 +407,10 @@ export default function Hero() {
                 {/* Socials & Language */}
                 <div className="flex justify-between items-center text-xs text-stone-500 border-t border-white/5 pt-4">
                   <div className="flex items-center gap-4">
-                    <a href="#instagram" aria-label="Instagram" className="hover:text-white transition-colors">
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:text-white transition-colors">
                       <InstagramIcon className="w-4 h-4" />
                     </a>
-                    <a href="#facebook" aria-label="Facebook" className="hover:text-white transition-colors">
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:text-white transition-colors">
                       <FacebookIcon className="w-4 h-4" />
                     </a>
                   </div>
