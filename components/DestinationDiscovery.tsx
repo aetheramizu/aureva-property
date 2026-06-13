@@ -12,7 +12,6 @@ interface Hotspot {
   description: string;
   image: string;
   coordinates: string;
-  position: { top: string; left: string };
 }
 
 const HOTSPOTS: Hotspot[] = [
@@ -23,8 +22,7 @@ const HOTSPOTS: Hotspot[] = [
     title: "Lagoon Cove",
     description: "Emerald bays secluded by tropical forest.",
     image: "/images/beachfront-reserve.webp",
-    coordinates: "N 3° 12' 44\" / E 73° 08' 55\"",
-    position: { top: "18%", left: "61%" }
+    coordinates: "N 3° 12' 44\" / E 73° 08' 55\""
   },
   {
     id: 1,
@@ -33,8 +31,7 @@ const HOTSPOTS: Hotspot[] = [
     title: "Sandbank Feast",
     description: "An intimate canopy under a vault of stars.",
     image: "/images/private-dining.webp",
-    coordinates: "N 3° 12' 12\" / E 73° 09' 18\"",
-    position: { top: "45%", left: "81%" }
+    coordinates: "N 3° 12' 12\" / E 73° 09' 18\""
   },
   {
     id: 2,
@@ -43,8 +40,7 @@ const HOTSPOTS: Hotspot[] = [
     title: "Blue Odyssey",
     description: "Teak yacht sails across untouched marine craters.",
     image: "/images/island-adventure.webp",
-    coordinates: "N 3° 12' 02\" / E 73° 08' 42\"",
-    position: { top: "50%", left: "47%" }
+    coordinates: "N 3° 12' 02\" / E 73° 08' 42\""
   },
   {
     id: 3,
@@ -53,9 +49,16 @@ const HOTSPOTS: Hotspot[] = [
     title: "Twilight Ridge",
     description: "Sipping sunset elixirs over volcanic peaks.",
     image: "/images/cliffside-pavilion.webp",
-    coordinates: "N 3° 11' 48\" / E 73° 08' 10\"",
-    position: { top: "72%", left: "25%" }
+    coordinates: "N 3° 11' 48\" / E 73° 08' 10\""
   }
+];
+
+// Technical map hotspot coordinates (positions on the SVG vector canvas)
+const HOTSPOT_POSITIONS = [
+  { top: "18%", left: "61%" },
+  { top: "45%", left: "81%" },
+  { top: "50%", left: "47%" },
+  { top: "72%", left: "25%" }
 ];
 
 export default function DestinationDiscovery() {
@@ -66,6 +69,10 @@ export default function DestinationDiscovery() {
 
   // Flicker-free hover bridge logic
   const handleNavEnter = (id: number) => {
+    // Skip hover events on touch devices to avoid double-tap flicker conflicts
+    if (typeof window !== "undefined" && !window.matchMedia("(hover: hover)").matches) {
+      return;
+    }
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setHoveredIndex(id);
   };
@@ -114,15 +121,15 @@ export default function DestinationDiscovery() {
         {/* ====================================================== */}
         {/* MAIN ROW: TOPOGRAPHY MAP & CATEGORICAL NAVIGATION     */}
         {/* ====================================================== */}
-        <div className="grid grid-cols-12 gap-y-12 lg:gap-y-0 items-center">
+        <div className="grid grid-cols-12 gap-y-10 lg:gap-y-0 items-center">
           
           {/* Left Column (Columns 1 to 4): Intro Header & Nav Links */}
           <div className="col-span-12 lg:col-span-4 flex flex-col items-start border-l border-stone-800/60 pl-6 md:pl-10 py-2">
-            <header className="mb-8">
+            <header className="mb-6 lg:mb-8">
               <span className="font-sans text-xs md:text-sm tracking-[0.3em] uppercase text-stone-400 mb-3 block">
                 Aisling Horizons
               </span>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-light text-stone-100 tracking-wide mb-5 leading-tight">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-light text-stone-100 tracking-wide mb-4 lg:mb-5 leading-tight">
                 Explore The <br />Surroundings.
               </h2>
               <p className="text-stone-400 text-sm font-sans font-light leading-relaxed max-w-sm lg:max-w-xs">
@@ -130,8 +137,8 @@ export default function DestinationDiscovery() {
               </p>
             </header>
 
-            {/* Categorical Index Links */}
-            <nav className="flex flex-col w-full gap-4 border-t border-white/[0.04] pt-6" aria-label="Attraction Categories">
+            {/* Desktop Navigation List (hidden on mobile/tablet) */}
+            <nav className="hidden lg:flex flex-col w-full gap-4 border-t border-white/[0.04] pt-6" aria-label="Attraction Categories (Desktop)">
               {HOTSPOTS.map((hotspot) => {
                 const isCurrentHovered = hoveredIndex === hotspot.id;
                 return (
@@ -139,6 +146,9 @@ export default function DestinationDiscovery() {
                     key={hotspot.id}
                     onMouseEnter={() => handleNavEnter(hotspot.id)}
                     onMouseLeave={handleNavLeave}
+                    onClick={() => {
+                      setHoveredIndex(prev => (prev === hotspot.id ? null : hotspot.id));
+                    }}
                     className="group/link flex flex-col items-start text-left py-3 border-b border-white/[0.02] last:border-b-0 w-full transition-all duration-300 outline-none"
                   >
                     <motion.span
@@ -166,6 +176,32 @@ export default function DestinationDiscovery() {
               })}
             </nav>
 
+            {/* Mobile/Tablet 2x2 Navigation Grid (hidden on desktop) */}
+            <div className="grid grid-cols-2 gap-x-6 gap-y-4 border-t border-white/[0.04] pt-6 w-full lg:hidden" aria-label="Attraction Categories (Mobile)">
+              {HOTSPOTS.map((hotspot) => {
+                const isCurrentActive = hoveredIndex === hotspot.id;
+                return (
+                  <button
+                    key={hotspot.id}
+                    onClick={() => {
+                      setHoveredIndex(prev => (prev === hotspot.id ? null : hotspot.id));
+                    }}
+                    className="group/link flex flex-col items-start text-left py-2 border-b border-white/[0.02] w-full transition-all duration-300 outline-none"
+                  >
+                    <span
+                      className={`font-sans text-[8px] tracking-[0.15em] uppercase block mb-0.5 transition-colors duration-300 ${isCurrentActive ? "text-[#c5a880]" : "text-stone-500"}`}
+                    >
+                      {hotspot.label}
+                    </span>
+                    <span
+                      className={`text-sm md:text-base font-serif font-light tracking-wide transition-colors duration-300 ${isCurrentActive ? "text-[#f5f5f4]" : "text-stone-300"}`}
+                    >
+                      {hotspot.category}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Column 5: Gap Spacer */}
@@ -261,14 +297,18 @@ export default function DestinationDiscovery() {
               </svg>
 
               {/* Pulsing Hotspot Embers */}
-              {HOTSPOTS.map((hotspot) => {
+              {HOTSPOTS.map((hotspot, idx) => {
                 const isCurrentHovered = hoveredIndex === hotspot.id;
+                const position = HOTSPOT_POSITIONS[idx];
                 return (
                   <div
                     key={hotspot.id}
-                    style={{ top: hotspot.position.top, left: hotspot.position.left }}
+                    style={{ top: position.top, left: position.left }}
                     onMouseEnter={() => handleNavEnter(hotspot.id)}
                     onMouseLeave={handleNavLeave}
+                    onClick={() => {
+                      setHoveredIndex(prev => (prev === hotspot.id ? null : hotspot.id));
+                    }}
                     className="absolute z-20 cursor-pointer -translate-x-1/2 -translate-y-1/2 p-4"
                   >
                     {/* Expand Ring 1 */}
@@ -334,8 +374,8 @@ export default function DestinationDiscovery() {
                         className="object-cover object-center"
                       />
 
-                      {/* Glassmorphic Caption Bar (pointer-events-auto allowed for CTA clicks) */}
-                      <div className="absolute bottom-6 left-6 right-6 p-4 border border-white/5 bg-[#080706]/85 backdrop-blur-md flex justify-between items-center rounded-sm pointer-events-auto">
+                      {/* Glassmorphic Caption Bar (Desktop Only - hidden on mobile/tablet) */}
+                      <div className="hidden lg:flex absolute bottom-6 left-6 right-6 p-4 border border-white/5 bg-[#080706]/85 backdrop-blur-md justify-between items-center rounded-sm pointer-events-auto">
                         <div className="flex flex-col items-start gap-0.5">
                           <span className="font-sans text-[10px] tracking-[0.2em] text-[#c5a880] uppercase font-semibold">
                             {hotspot.label}
@@ -355,8 +395,41 @@ export default function DestinationDiscovery() {
               </AnimatePresence>
             </div>
 
+            {/* Mobile/Tablet Glassmorphic Caption Bar (positioned outside/below the map container to not block the image) */}
+            <AnimatePresence>
+              {hoveredIndex !== null && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="block lg:hidden mt-4 p-4 border border-white/5 bg-[#0c0b0a]/60 backdrop-blur-md rounded-sm w-full"
+                >
+                  {(() => {
+                    const activeHotspot = HOTSPOTS.find(h => h.id === hoveredIndex);
+                    if (!activeHotspot) return null;
+                    return (
+                      <div className="flex flex-col gap-2">
+                        <div className="flex justify-between items-baseline">
+                          <span className="font-sans text-[10px] tracking-[0.2em] text-[#c5a880] uppercase font-semibold">
+                            {activeHotspot.label}
+                          </span>
+                          <span className="font-sans text-[8px] tracking-[0.15em] text-stone-500 font-mono">
+                            {activeHotspot.coordinates}
+                          </span>
+                        </div>
+                        <p className="font-serif italic text-xs text-stone-300 leading-relaxed">
+                          {activeHotspot.description}
+                        </p>
+                      </div>
+                    );
+                  })()}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             {/* Symmetrical Gold-Ink Rectangle Button below the Interactive Map */}
-            <div className="mt-6 flex justify-end">
+            <div className="mt-6 flex justify-center lg:justify-end">
               <a
                 href="https://maps.google.com/?q=3.206667,73.136667"
                 target="_blank"
