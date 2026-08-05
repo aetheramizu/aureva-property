@@ -1,8 +1,8 @@
 # Aureva Property Landing Page
 
-A modern, single-page promotional website for **Aureva Property**, built with **Next.js App Router**, **React**, **TypeScript**, and **Tailwind CSS v4**.
+A modern, single-page promotional website for **AUREVA — Luxury Villas & Resort**, built with **Next.js App Router**, **React**, **TypeScript**, and **Tailwind CSS v4**.
 
-This project focuses on delivering a premium first impression through strong visual hierarchy, smooth scroll-based transitions, and interactive UI behaviors while staying performant and responsive across devices.
+This project focuses on delivering a premium first impression through immersive visual storytelling, elegant typography, and luxury-oriented section flow while staying performant and responsive across devices.
 
 ---
 
@@ -10,11 +10,11 @@ This project focuses on delivering a premium first impression through strong vis
 
 Aureva Property is designed as a front-end showcase experience with emphasis on:
 
-- Clear property-centric storytelling
-- Elegant typography and layout rhythm
-- Scroll-driven reveal animations
-- Interactive effects (preloader, cursor glow, animated counters, segmented indicators, magnetic CTA button)
-- Fully responsive section composition for desktop and mobile
+- Luxury property-centric storytelling
+- High-end visual hierarchy and layout rhythm
+- Curated section flow for villas, experiences, testimonials, and booking
+- Interactive and motion-enhanced presentation using `framer-motion`
+- Fully responsive composition for desktop and mobile
 
 The page is composed in `app/page.tsx` using reusable section components.
 
@@ -22,11 +22,13 @@ The page is composed in `app/page.tsx` using reusable section components.
 
 ## Tech Stack
 
-- **Next.js** 16.2.0
+- **Next.js** 16.2.7
 - **React** 19.2.4
 - **TypeScript** 5
 - **Tailwind CSS** 4
-- **ESLint** 9 (`eslint-config-next`)
+- **Framer Motion** 12.40.0
+- **Lucide React** 1.17.0
+- **ESLint** 9 (`eslint-config-next` 16.2.7)
 
 ---
 
@@ -34,18 +36,15 @@ The page is composed in `app/page.tsx` using reusable section components.
 
 `app/page.tsx` renders the page in this sequence:
 
-1. `LandingEffects` (preloader + runtime visual behaviors)
-2. `Navbar`
-3. `Hero`
-4. `Performance`
-5. `Aerodynamics`
-6. `Engine`
-7. `Experience`
-8. `Gallery`
-9. `CTA`
-10. `Footer`
-
-> Jika section naming akan diganti ke domain properti (mis. `FeaturedProperties`, `Amenities`, `Location`, `Contact`), komposisi ini bisa langsung diadaptasi tanpa mengubah fondasi arsitektur.
+1. `Hero`
+2. `FeaturedVillas`
+3. `CuratedExperiences`
+4. `ImmersiveGallery`
+5. `WhyAureva`
+6. `GuestChronicles`
+7. `DestinationDiscovery`
+8. `BookingCTA`
+9. `LuxuryFooter`
 
 ---
 
@@ -54,15 +53,15 @@ The page is composed in `app/page.tsx` using reusable section components.
 ```bash
 .
 ├── app/
-│   ├── globals.css        # Global design tokens, animations, and shared visual rules
-│   ├── layout.tsx         # Root layout, fonts, and metadata
+│   ├── globals.css        # Global design tokens, typography, and visual styling
+│   ├── layout.tsx         # Root layout, fonts, metadata, and SEO/social config
 │   ├── page.tsx           # Main landing page composition
-│   └── icon.tsx           # Dynamic icon generation with next/og
-├── components/            # All landing-page sections and UI blocks
-├── public/                # Static assets (hero/gallery images, icons)
+│   └── icon.tsx           # App icon route for Next.js App Router
+├── components/            # All landing-page sections and reusable UI blocks
+├── public/                # Static assets (hero imagery, logos, gallery visuals)
 ├── eslint.config.mjs      # ESLint configuration
 ├── next.config.ts         # Next.js configuration
-├── tsconfig.json          # TypeScript configuration + path alias (@/*)
+├── tsconfig.json          # TypeScript configuration
 └── package.json           # Scripts and dependencies
 ```
 
@@ -102,33 +101,45 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ## Styling & Interaction Notes
 
-- Global theme variables and keyframes are defined in `app/globals.css`.
+- Global theme and shared visual rules are defined in `app/globals.css`.
 - Fonts are loaded in `app/layout.tsx` via `next/font/google`:
-  - `Inter` (`--font-body`)
-  - `Rajdhani` (`--font-ui`)
-  - `Bebas Neue` (`--font-display`)
-- Runtime-only DOM animations and observers are in `components/LandingEffects.tsx` (`"use client"`).
+  - `Cormorant Garamond` (`--font-cormorant-garamond`)
+  - `Inter` (`--font-inter`)
+- Motion/interactive presentation is supported through `framer-motion` across components.
+
+---
+
+## SEO & Metadata Notes
+
+Metadata is configured in `app/layout.tsx`, including:
+
+- `metadataBase`: `https://aureva-resort.vercel.app`
+- Title/description for search engines
+- Open Graph configuration for social sharing
+- Twitter card configuration
+- Favicon/app icons sourced from `/images/aureva-logo-mark.webp`
+- Locale: `en_US`
 
 ---
 
 ## Customization Guide (Aureva Property)
 
-To align this template with your Aureva Property content:
+To align this template with your latest property campaign:
 
 - **Section copy/content**  
-  Update text and messaging inside each file in `components/`.
+  Update messaging and property narratives in each file under `components/`.
 
 - **Branding assets**  
-  Replace hero/gallery/property visuals in `public/`.
+  Replace hero/gallery/logo visuals in `public/images/`.
 
 - **SEO metadata**  
-  Edit title and description in `app/layout.tsx`.
+  Update title, description, and social preview assets in `app/layout.tsx`.
 
 - **Theme and motion tuning**  
-  Adjust spacing, colors, gradients, animation timing in `app/globals.css`.
+  Adjust spacing, color palette, typography scale, and animation feel in `app/globals.css` and component-level motion configs.
 
 - **CTA flow**  
-  Point CTA buttons to your WhatsApp, booking form, or listing/contact page.
+  Connect `BookingCTA` to WhatsApp concierge, booking engine, lead form, or contact endpoint.
 
 ---
 
@@ -143,17 +154,11 @@ npm run build
 
 ---
 
-## Notes
+## Deployment
 
-This repository currently uses a cinematic landing-page structure originally suitable for automotive showcase flows.  
-For Aureva Property, the same architecture can be reused effectively by adapting:
+Production metadata is currently aligned with:
 
-- section labels
-- content hierarchy
-- image/video assets
-- CTA destinations
-
-without needing major structural rewrites.
+- `https://aureva-resort.vercel.app`
 
 ---
 
